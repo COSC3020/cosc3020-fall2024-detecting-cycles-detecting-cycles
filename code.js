@@ -1,28 +1,28 @@
-// function hasCycle(graph) {
-//     return false;
-// }
-
-
-function depthFirstSearch(graph, startNode, targetNode) { // note that graph will be an adjacency list
-    let visited = [] 
-    let path = []
+function hasCycle(graph) {
+    let visited = [];
+    let path = [];
+    let result = false;
     
-    function depthFirstHelp(node){
-        if (visited.includes(node)) return false;
-        if (node === targetNode) {
-          path.push(node);
-          return true;
-        }
-        visited.push(node);
-        path.push(node);
+    function cycleHelp(node){
+        if (path[node]) return true;
+        if (visited[node]) return false;
+        
+        visited[node] = true;
+        path[node] = true;
+        
         for(let i = 0; i < graph[node].length; i++){
-            if(depthFirstHelp(graph[node][i]))
+            if(cycleHelp(graph[node][i]))
               return true;
         }
-        path.pop(); // pop it because the target wasn't found on it's path
+        path[node] = false;
         return false;
     }
     
-    depthFirstHelp(startNode);
-    return path;
+    for (let node = 0; node < graph.length; node++) {
+        if (!visited[node] && cycleHelp(node)) {
+            return true;
+        }
+    }
+    
+    return false;
 }
